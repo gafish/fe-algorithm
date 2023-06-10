@@ -13,24 +13,24 @@
 
 
   <script>
-    function stringGroup(list = [], result = [], current = "", temp = "") {
-      current += temp;
-      if (list.length === 0) {
-        // 递归的出口，将对应结果添加到list中
-        return result.push(current);
+    function bubbleSort(arr) {
+      let length = arr.length;
+      // 外层循环用控制 排序进行多少轮
+      for (let i = 0; i < length; i++) {
+        // 内层循环用于每一轮的数据比较
+        // 注意j的长度范围 length - i - 1
+        for (let j = 0; j < length - i - 1; j++) {
+          // 相邻元素，大的放到后面
+          if (arr[j] > arr[j + 1]) {
+            // 交换位置
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+          }
+        }
       }
-      for (let i = 0; i < list.length; i++) {
-        // 每次递归 固定第一个字符
-        temp = list.shift();
-        stringGroup(list, result, current, temp);
-        // 将删除的temp重新添加到queue尾部
-        list.push(temp);
-      }
-      // 这里去重是解决str中有重复的字母，比如str为'aacd'
-      return [...new Set(result)];
+      return arr;
     }
 
-    const value = stringGroup('abc'.split(''), [], '', '');
+    const value = bubbleSort([3, 1, 7, 2, 9, 2, 3, 0, 1])
 
     output.innerHTML = JSON.stringify(value, null, 4)
   </script>
