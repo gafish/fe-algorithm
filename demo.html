@@ -10,21 +10,28 @@
 
 
   <script>
-    function insertSort(arr) {
-      for (let i = 1; i < arr.length; i++) {
-        let j = i
-        const temp = arr[j]
-
-        while (j > 0 && arr[j - 1] > temp) {
-          arr[j] = arr[j - 1]
-          j--
-        }
-        arr[j] = temp
+    function quickSort(arr) {
+      if (arr.length <= 1) {
+        return arr;
       }
-      return arr
+
+      const i = Math.floor(arr.length / 2)
+      const pivot = arr.splice(i, 1)[0];
+      const left = [];
+      const right = [];
+
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i] < pivot) {
+          left.push(arr[i]);
+        } else {
+          right.push(arr[i]);
+        }
+      }
+
+      return [...quickSort(left), pivot, ...quickSort(right)];
     }
 
-    const value = insertSort([3, 1, 7, 2, 9, 2, 3, 0, 1])
+    const value = quickSort([3, 1, 7, 2, 9, 2, 3, 0, 1])
 
     output.innerHTML = JSON.stringify(value, null, 4)
   </script>
