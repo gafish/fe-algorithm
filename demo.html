@@ -10,27 +10,21 @@
 
 
   <script>
-    function selectSort(arr) {
-      let index
+    function insertSort(arr) {
+      for (let i = 1; i < arr.length; i++) {
+        let j = i
+        const temp = arr[j]
 
-      for (let i = 0; i < arr.length; i++) {
-        index = i
-
-        for (let j = i + 1; j < arr.length; j++) {
-          if (arr[j] < arr[index]) {
-            index = j
-          }
+        while (j > 0 && arr[j - 1] > temp) {
+          arr[j] = arr[j - 1]
+          j--
         }
-
-        if (index !== i) {
-          [arr[i], arr[index]] = [arr[index], arr[i]]
-        }
+        arr[j] = temp
       }
-
       return arr
     }
 
-    const value = selectSort([3, 1, 7, 2, 9, 2, 3, 0, 1])
+    const value = insertSort([3, 1, 7, 2, 9, 2, 3, 0, 1])
 
     output.innerHTML = JSON.stringify(value, null, 4)
   </script>
