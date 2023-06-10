@@ -1,52 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Demo</title>
-</head>
-<body>
-  <pre id="output"></pre>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demo</title>
+  </head>
+  <body>
+    <pre id="output"></pre>
 
-
-  <script>
-    function mergeSort(array) {
-      let len = array.length;
-
-      // 当每个子序列中仅有1个元素时返回
-      if (len <= 1) {
-        return array;
-      }
-      // 将给定的列表分为两半
-      let num = Math.floor(len / 2);
-      let left = mergeSort(array.slice(0, num));
-      let right = mergeSort(array.slice(num, array.length));
-      return merge(left, right);
-
-      function merge(left, right) {
-        let [l, r] = [0, 0];
-        let result = [];
-        // 从 left 和 right 区域中各个取出第一个元素，比较它们的大小
-        while (l < left.length && r < right.length) {
-          // 将较小的元素添加到result中，然后从较小元素所在的区域内取出下一个元素，继续进行比较；
-          if (left[l] < right[r]) {
-            result.push(left[l]);
-            l++;
+    <script>
+      function listToTree(data) {
+        // 使用对象重新存储数据, 空间换时间
+        let map = {};
+        // treeData存储最后结果
+        let treeData = [];
+        // 遍历原始数据data，存到map中，id为key，值为数据
+        for (let i = 0; i < data.length; i++) {
+          map[data[i].id] = data[i];
+        }
+        // 遍历对象
+        for (let i in map) {
+          const { id, parentId } = map[i];
+          // 根据 parentId 找到的是父节点
+          if (map[parentId]) {
+            if (!map[parentId].children) {
+              map[parentId].children = [];
+            }
+            // 将子节点放到父节点的 children中
+            map[parentId].children.push(map[i]);
           } else {
-            result.push(right[r]);
-            r++;
+            // parentId 找不到对应值，说明是根结点，直接插到根数组中
+            treeData.push(map[i]);
           }
         }
-        // 如果 left 或者 right 有一方为空，则直接将另一方的所有元素依次添加到result中
-        result = result.concat(left.slice(l, left.length));
-        result = result.concat(right.slice(r, right.length));
-        return result;
+        return treeData;
       }
-    }
 
-    const value = mergeSort([3, 1, 7, 2, 9, 2, 3, 0, 1])
+      const value = listToTree([
+        { id: 1, title: "child1", parentId: 0 },
+        { id: 2, title: "child2", parentId: 0 },
+        { id: 3, title: "child1_1", parentId: 1 },
+        { id: 4, title: "child1_2", parentId: 1 },
+        { id: 5, title: "child2_1", parentId: 2 },
+        { id: 6, title: "child3", parentId: 0 },
+      ]);
 
-    output.innerHTML = JSON.stringify(value, null, 4)
-  </script>
-</body>
+      output.innerHTML = JSON.stringify(value, null, 4);
+    </script>
+  </body>
 </html>
