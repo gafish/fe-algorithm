@@ -9,23 +9,23 @@
     <pre id="output"></pre>
 
     <script>
-      function rangeTree(data) {
-        const result = [];
-        const stack = [...data];
-
-        while (stack.length) {
-          const item = stack.shift();
-          result.push(item.id);
-
-          if (item.children) {
-            stack.push(...item.children);
+      function findTreeNode(tree, func) {
+        if (!tree.length) return null;
+        for (let i = 0; i < tree.length; i++) {
+          // 条件成立 直接返回
+          if (func(tree[i])) return tree[i];
+          if (tree[i].children) {
+            const res = findTreeNode(tree[i].children, func);
+            // 结果存在再返回
+            if (res) {
+              return res;
+            }
           }
         }
-
-        return result;
+        return null;
       }
 
-      const value = rangeTree([
+      const value = findTreeNode([
         {
           id: 1,
           title: "child1",
@@ -55,7 +55,7 @@
             },
           ],
         },
-      ]);
+      ], data => data.title === "child2_1");
 
       output.innerHTML = JSON.stringify(value, null, 4);
     </script>
