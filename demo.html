@@ -4,9 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Demo</title>
+  <script>
+    let count = 0
+  </script>
 </head>
 <body>
+  <pre id="output"></pre>
+
+
   <script>
+    function findThreeSum(nums, target) {
+      nums.sort((a, b) => a - b);
+
+      const result = [];
+
+      for (let i = 0; i < nums.length; i++) {
+        if (i > 0 && nums[i] === nums[i - 1]) continue;
+        let l = i + 1, r = nums.length - 1;
+        while (l < r) {
+          const sum = nums[i] + nums[l] + nums[r];
+          if (sum === target) {
+            result.push([nums[i], nums[l], nums[r]]);
+            l++;
+            r--;
+            while (l < r && nums[l] === nums[l + 1]) l++;
+            while (l < r && nums[r] === nums[r - 1]) r--; 
+          } else if (sum < target) {
+            l++;
+          } else {
+            r--;
+          }
+        }
+      }
+
+      return result;
+    }
+
+    const value = findThreeSum([5, 2, 1, 1, 2, 3, 4, 6], 8)
+
+    output.innerHTML = JSON.stringify(value, null, 4)
   </script>
 </body>
 </html>
