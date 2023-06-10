@@ -13,34 +13,28 @@
 
 
   <script>
-    function findThreeSum(nums, target) {
-      nums.sort((a, b) => a - b);
+    function versionSort(arr) {
+      return arr.sort((a, b) => {
+        const arr1 = a.split('.');
+        const arr2 = b.split('.');
+        const maxLength = Math.max(arr1.length, arr2.length);
 
-      const result = [];
+        for (let i = 0; i < maxLength; i++) {
+          const num1 = parseInt(arr1[i]) || 0;
+          const num2 = parseInt(arr2[i]) || 0;
 
-      for (let i = 0; i < nums.length; i++) {
-        if (i > 0 && nums[i] === nums[i - 1]) continue;
-        let l = i + 1, r = nums.length - 1;
-        while (l < r) {
-          const sum = nums[i] + nums[l] + nums[r];
-          if (sum === target) {
-            result.push([nums[i], nums[l], nums[r]]);
-            l++;
-            r--;
-            while (l < r && nums[l] === nums[l + 1]) l++;
-            while (l < r && nums[r] === nums[r - 1]) r--; 
-          } else if (sum < target) {
-            l++;
-          } else {
-            r--;
+          if (num1 < num2) {
+            return -1; // a 应排在 b 前面
+          } else if (num1 > num2) {
+            return 1; // b 应排在 a 前面
           }
         }
-      }
 
-      return result;
+        return 0; // 版本号相等
+      })
     }
 
-    const value = findThreeSum([5, 2, 1, 1, 2, 3, 4, 6], 8)
+    const value = versionSort(['2.1.0.11', '0.402.1', '10.2.1', '5.1.2', '1.0.4.5', '2.1.0'])
 
     output.innerHTML = JSON.stringify(value, null, 4)
   </script>
