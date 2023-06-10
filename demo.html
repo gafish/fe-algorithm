@@ -9,40 +9,56 @@
     <pre id="output"></pre>
 
     <script>
-      function listToTree(data) {
-        // 使用对象重新存储数据, 空间换时间
-        let map = {};
-        // treeData存储最后结果
-        let treeData = [];
-        // 遍历原始数据data，存到map中，id为key，值为数据
+      function deepTree(data) {
+        const result = []
+        let stack = []
+
         for (let i = 0; i < data.length; i++) {
-          map[data[i].id] = data[i];
+          const item = data[i]
+          stack.push(item)
         }
-        // 遍历对象
-        for (let i in map) {
-          const { id, parentId } = map[i];
-          // 根据 parentId 找到的是父节点
-          if (map[parentId]) {
-            if (!map[parentId].children) {
-              map[parentId].children = [];
-            }
-            // 将子节点放到父节点的 children中
-            map[parentId].children.push(map[i]);
-          } else {
-            // parentId 找不到对应值，说明是根结点，直接插到根数组中
-            treeData.push(map[i]);
+
+        while (stack.length) {
+          const item = stack.shift()
+          result.push(item.id)
+          if (item.children) {
+            stack = item.children.concat(stack);
           }
         }
-        return treeData;
+
+        return result
       }
 
-      const value = listToTree([
-        { id: 1, title: "child1", parentId: 0 },
-        { id: 2, title: "child2", parentId: 0 },
-        { id: 3, title: "child1_1", parentId: 1 },
-        { id: 4, title: "child1_2", parentId: 1 },
-        { id: 5, title: "child2_1", parentId: 2 },
-        { id: 6, title: "child3", parentId: 0 },
+      const value = deepTree([
+        {
+          id: 1,
+          title: "child1",
+          parentId: 0,
+          children: [
+            {
+              id: 3,
+              title: "child1_1",
+              parentId: 1,
+            },
+            {
+              id: 4,
+              title: "child1_2",
+              parentId: 1,
+            },
+          ],
+        },
+        {
+          id: 2,
+          title: "child2",
+          parentId: 0,
+          children: [
+            {
+              id: 5,
+              title: "child2_1",
+              parentId: 2,
+            },
+          ],
+        },
       ]);
 
       output.innerHTML = JSON.stringify(value, null, 4);
