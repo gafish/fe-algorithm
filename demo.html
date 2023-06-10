@@ -9,27 +9,23 @@
     <pre id="output"></pre>
 
     <script>
-      function deepTree(data) {
-        const result = []
-        let stack = []
-
-        for (let i = 0; i < data.length; i++) {
-          const item = data[i]
-          stack.push(item)
-        }
+      function rangeTree(data) {
+        const result = [];
+        const stack = [...data];
 
         while (stack.length) {
-          const item = stack.shift()
-          result.push(item.id)
+          const item = stack.shift();
+          result.push(item.id);
+
           if (item.children) {
-            stack = item.children.concat(stack);
+            stack.push(...item.children);
           }
         }
 
-        return result
+        return result;
       }
 
-      const value = deepTree([
+      const value = rangeTree([
         {
           id: 1,
           title: "child1",
