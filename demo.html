@@ -9,53 +9,38 @@
     <pre id="output"></pre>
 
     <script>
-      function findTreeNode(tree, func) {
-        if (!tree.length) return null;
-        for (let i = 0; i < tree.length; i++) {
-          // 条件成立 直接返回
-          if (func(tree[i])) return tree[i];
-          if (tree[i].children) {
-            const res = findTreeNode(tree[i].children, func);
-            // 结果存在再返回
-            if (res) {
-              return res;
+      function preOrderOfBST(list) {
+        if (list && list.length > 0) {
+          // 前序遍历，第一个值为根节点
+          var root = list[0];
+          // 找到数组中，第一个比根节点大的节点，即为右子树的节点
+          for (var i = 0; i < list.length; i++) {
+            if (list[i] > root) {
+              break;
             }
           }
+          // 遍历右子树的节点，要求所有右子树的节点都比根节点大
+          for (let j = i; j < list.length; j++) {
+            if (list[j] < root) {
+              return false;
+            }
+          }
+          var left = true;
+          // 同理，递归判断左子树是否符合二叉查找树的规则
+          if (i > 1) {
+            left = preOrderOfBST(list.slice(1, i + 1));
+          }
+          var right = true;
+          // 递归判断右子树是否符合二叉查找树的规则
+          if (i < list.length) {
+            right = preOrderOfBST(list.slice(i, list.length));
+          }
+          // 左、右子树都符合要求，则是一个二叉查找树
+          return left && right;
         }
-        return null;
       }
 
-      const value = findTreeNode([
-        {
-          id: 1,
-          title: "child1",
-          parentId: 0,
-          children: [
-            {
-              id: 3,
-              title: "child1_1",
-              parentId: 1,
-            },
-            {
-              id: 4,
-              title: "child1_2",
-              parentId: 1,
-            },
-          ],
-        },
-        {
-          id: 2,
-          title: "child2",
-          parentId: 0,
-          children: [
-            {
-              id: 5,
-              title: "child2_1",
-              parentId: 2,
-            },
-          ],
-        },
-      ], data => data.title === "child2_1");
+      const value = preOrderOfBST([5, 3, 2, 1, 4, 6, 7, 8, 9]);
 
       output.innerHTML = JSON.stringify(value, null, 4);
     </script>
