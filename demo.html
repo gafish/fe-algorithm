@@ -4,33 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Demo</title>
-  <script>
-    let count = 0
-  </script>
 </head>
 <body>
   <pre id="output"></pre>
 
 
   <script>
-    function bubbleSort(arr) {
-      let length = arr.length;
-      // 外层循环用控制 排序进行多少轮
-      for (let i = 0; i < length; i++) {
-        // 内层循环用于每一轮的数据比较
-        // 注意j的长度范围 length - i - 1
-        for (let j = 0; j < length - i - 1; j++) {
-          // 相邻元素，大的放到后面
-          if (arr[j] > arr[j + 1]) {
-            // 交换位置
-            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
+    function selectSort(arr) {
+      let index
+
+      for (let i = 0; i < arr.length; i++) {
+        index = i
+
+        for (let j = i + 1; j < arr.length; j++) {
+          if (arr[j] < arr[index]) {
+            index = j
           }
         }
+
+        if (index !== i) {
+          [arr[i], arr[index]] = [arr[index], arr[i]]
+        }
       }
-      return arr;
+
+      return arr
     }
 
-    const value = bubbleSort([3, 1, 7, 2, 9, 2, 3, 0, 1])
+    const value = selectSort([3, 1, 7, 2, 9, 2, 3, 0, 1])
 
     output.innerHTML = JSON.stringify(value, null, 4)
   </script>
