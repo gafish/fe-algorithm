@@ -9,36 +9,41 @@
     <pre id="output"></pre>
 
     <script>
-      function maxSlidingWindow(nums, k) {
+      function findLongestIncreasingSubsequence(nums) {
+        if (nums.length === 0) {
+          return [];
+        }
+
+        const dp = Array(nums.length).fill(1); // 初始化 dp 数组，每个元素默认为 1
+        const prev = Array(nums.length).fill(null); // 初始化 prev 数组
+
+        let maxLength = 1;
+        let endIndex = 0;
+
+        for (let i = 1; i < nums.length; i++) {
+          for (let j = 0; j < i; j++) {
+            if (nums[i] > nums[j] && dp[j] + 1 > dp[i]) {
+              dp[i] = dp[j] + 1;
+              prev[i] = j;
+
+              if (dp[i] > maxLength) {
+                maxLength = dp[i];
+                endIndex = i;
+              }
+            }
+          }
+        }
         const result = [];
-        const deque = [];
-
-        for (let i = 0; i < nums.length; i++) {
-          // 移除不在滑动窗口范围内的元素
-          if (deque.length > 0 && deque.length >= k) {
-            deque.shift();
-          }
-          
-          // 移除队列中比当前元素小的元素
-          while (deque.length > 0 && nums[deque[deque.length - 1]] <= nums[i]) {
-            deque.pop();
-          }
-          console.log('i, deque: ', i, deque);
-
-          // 添加当前元素到队列中
-          deque.push(i);
-          
-          // 将当前滑动窗口的最大值加入结果数组
-          if (i >= k - 1) {
-            result.push(nums[deque[0]]);
-          }
+        while (endIndex !== null) {
+          result.unshift(nums[endIndex]);
+          endIndex = prev[endIndex];
         }
 
         return result;
       }
 
 
-      const value = maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3);
+      const value = findLongestIncreasingSubsequence([3, 5, 7, 1, 2, 8]);
 
       output.innerHTML = JSON.stringify(value, null, 4);
       // output.innerHTML = value
