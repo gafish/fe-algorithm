@@ -9,20 +9,39 @@
     <pre id="output"></pre>
 
     <script>
-      function fib(n) {
-        // 使用dp数组，将之前计算的结果存起来，防止栈溢出
-        if (n < 2) return 1;
-        let dp = [1n, 1n];
-        for (let i = 2; i <= n; i++) {
-          dp[i] = dp[i - 1] + dp[i - 2];
+      function maxSlidingWindow(nums, k) {
+        const result = [];
+        const deque = [];
+
+        for (let i = 0; i < nums.length; i++) {
+          // 移除不在滑动窗口范围内的元素
+          if (deque.length > 0 && deque.length >= k) {
+            deque.shift();
+          }
+          
+          // 移除队列中比当前元素小的元素
+          while (deque.length > 0 && nums[deque[deque.length - 1]] <= nums[i]) {
+            deque.pop();
+          }
+          console.log('i, deque: ', i, deque);
+
+          // 添加当前元素到队列中
+          deque.push(i);
+          
+          // 将当前滑动窗口的最大值加入结果数组
+          if (i >= k - 1) {
+            result.push(nums[deque[0]]);
+          }
         }
-        return dp[n];
+
+        return result;
       }
 
-      const value = fib(20);
 
-      // output.innerHTML = JSON.stringify(value, null, 4);
-      output.innerHTML = value
+      const value = maxSlidingWindow([1, 3, -1, -3, 5, 3, 6, 7], 3);
+
+      output.innerHTML = JSON.stringify(value, null, 4);
+      // output.innerHTML = value
     </script>
   </body>
 </html>
