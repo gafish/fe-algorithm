@@ -9,73 +9,44 @@
     <pre id="output"></pre>
 
     <script>
+      
+      function threeSumClosest(nums, target) {
+        if (nums.length < 3) return [];
 
-      // function runTask(list){
-      //   // 挨个执行传递的异步任务
-      // }
-      
-      function limit(maxCount){
-        // [,5]
-        // [2,34,]
-        let queue = []
-        let activeCount = 0
-      
-        const next = ()=>{
-          //下一个任务
-          activeCount--
-          if(queue.length>0){
-            queue.shift()()
-          }
+        nums = nums.sort((a, b) => {
+            return a - b;
+        });
+        let sum = 0,
+            distance = undefined,
+            result;
+        for (let i = 0; i < nums.length - 2; i++) {
+            let a = nums[i];
+            if (i > 0 && nums[i - 1] === a) continue;
+            let j = i + 1,
+                k = nums.length - 1;
+            while (j < k) {
+                let b = nums[j],
+                    c = nums[k];
+                sum = a + b + c;
+                if (distance === undefined || Math.abs(target - sum) < distance) {
+                    distance = Math.abs(target - sum)
+                    result = sum
+                }
+                if (sum < target) {
+                    j++
+                } else {
+                    k--
+                }
+            }
         }
-        const run = async (fn,resolve,args)=>{
-          //执行一个函数
-          activeCount++
-          const result = (async()=>fn(...args))()
-          resolve(result)
-          await result
-          next() //下一个
-        }
-        const push = async (fn,resolve,args)=>{
-          queue.push(run.bind(null,fn,resolve,args))
-          if(activeCount<maxCount && queue.length>0){
-            // 队列没满 并且还有任务 启动任务
-            queue.shift()()
-          }
-        }
-      
-        let runner = (fn,...args)=>{
-          return new Promise((resolve)=>{
-            push(fn,resolve,args)
-          })
-        }
-        return runner
-      
-      
+        return result
       }
-      async function sleep(n,name='test'){
-        return new Promise(resolve=>{
-          console.log(n,name,'start')
-          setTimeout(()=>{
-            console.log(n,name,'end','-------------')
-            resolve({n,name})
-          },n*1000)
-        })
-      }
-      
-      async function start(){
-        let runner = limit(2) //并发量是3
-        let tasks = [
-          ()=> sleep(1,'吃饭'),
-          ()=> sleep(3,'睡觉'),
-          ()=> sleep(5,'打游戏'),
-          ()=> sleep(3.5,'学习算法'),
-          ()=> sleep(4,'学习Vue和React'),
-        ].map(runner)
-        let result = await Promise.all(tasks)
-        console.log(result,'end')
-      }
-      // @think 如果任务有优先级呢
-      start()
+
+
+      const value = threeSumClosest([-1, 2, 1, -4], 1);
+
+      output.innerHTML = JSON.stringify(value, null, 4);
+      // output.innerHTML = value
     </script>
   </body>
 </html>
